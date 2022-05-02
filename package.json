@@ -1,7 +1,6 @@
 {
   "name": "electron-app",
   "version": "0.1.0",
-  "private": true,
   "productName": "React Electron App",
   "main": "public/electron.js",
   "homepage": "./",
@@ -26,7 +25,7 @@
     "eject": "react-scripts eject",
     "start-electron": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
     "package": "electron-builder build --mac --win -c.extraMetadata.main=build/electron.js --publish never",
-    "publish":"electron-builder build --mac --win --publish always"
+    "publish": "electron-builder build --mac --win --publish always"
   },
   "eslintConfig": {
     "extends": [
@@ -47,35 +46,31 @@
     ]
   },
   "devDependencies": {
-    "electron": "^18.2.0"
+    "electron": "^18.2.0",
+    "electron-builder": "^23.0.3"
   },
   "build": {
     "mac": {
-        "publish": {
-            "provider": "github",
-            "owner": "Github Owner",
-            "repo": "Repository Name",
-            "private": true,
-            "token": ""
-        }
+      "publish": {
+        "provider": "github",
+        "owner": "cinarrtolga",
+        "repo": "ART-React-Electron-App"
+      }
     },
     "win": {
-        "publish": {
-            "provider": "github",
-            "owner": "Github Owner",
-            "repo": "Repository Name",
-            "private": true,
-            "token": ""
-        }
+      "publish": {
+        "provider": "github",
+        "owner": "cinarrtolga",
+        "repo": "ART-React-Electron-App"
+      }
     },
     "files": [
-        "build/**/*",
-        "node_modules/**/*"
+      "build/**/*",
+      "node_modules/**/*"
     ],
     "publish": {
-        "provider": "github",
-        "private": true,
-        "owner": "Github Owner"
+      "provider": "github",
+      "owner": "cinarrtolga"
     }
-}
+  }
 }
