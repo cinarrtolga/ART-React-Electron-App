@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
 const url = require('url');
 const { autoUpdater } = require("electron-updater");
@@ -18,7 +18,8 @@ function createWindow() {
             nodeIntegration: true
         }
     });
-    win.loadURL(startUrl);
+    //win.loadURL(startUrl);
+    win.loadURL('file:///' + __dirname + "/index.html");
     app.on('window-all-closed', () => {
         if (process.platform !== 'darwin') {
             app.quit()
@@ -52,7 +53,8 @@ autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
 		detail: 'A new version download started. The app will be restarted to install the update.'
 	};
 	dialog.showMessageBox(dialogOpts);
-})
+    updateInterval = null;
+});
 
 autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
 	const dialogOpts = {
