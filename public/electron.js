@@ -32,8 +32,17 @@ function createWindow() {
 
 app.whenReady().then(() => {
     createWindow();
-    autoUpdater.channel = process.env.REACT_APP_ENV_UPDATE_CHANNEL || 'latest';
+    autoUpdater.channel = process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING || 'latest';
     updateInterval = setInterval(() => autoUpdater.checkForUpdates(), 10000);
+
+    const dialogOpts = {
+        type: 'info',
+        buttons: ['Ok'],
+        title: `The selected app channel is ${process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING}`,
+        message: process.platform === 'win32' ? releaseNotes : releaseName,
+        detail: `A new ${process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING} / ${process.env.REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX} version download started. The app will be restarted to install the update.`
+    };
+    dialog.showMessageBox(dialogOpts);
 });
 
 app.on('window-all-closed', () => {
