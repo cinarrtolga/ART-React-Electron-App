@@ -1,6 +1,6 @@
 {
   "name": "electron-app",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "productName": "React Electron App",
   "main": "public/electron.js",
   "homepage": "./",
@@ -13,6 +13,7 @@
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
     "electron-updater": "^4.6.5",
+    "env-cmd": "^10.1.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
@@ -20,8 +21,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "new-version": "npm version --git-tag-version=false",
+    "version": "echo 'starting postversion script'",
+    "postversion": "LAST_VERSION=$(npm pkg get version | sed 's/\"//g')$REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX && echo $LAST_VERSION && sed -i.bak \"s/\\\"version\\\": \\\"[0-9]\\.[0-9]\\.[0-9]\\\"/\\\"version\\\": \\\"$LAST_VERSION\\\"/g\" package.json",
     "start": "export BROWSER=none && react-scripts start",
-    "build": "react-scripts build",
+    "build:dev": "env-cmd -f .env.dev npm run version && react-scripts build",
+    "build:qa": "env-cmd -f .env.qa npm run version && react-scripts build",
+    "build:prod": "env-cmd -f .env.prod npm run version && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-electron": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
@@ -51,6 +57,7 @@
     "electron-builder": "^23.0.3"
   },
   "build": {
+    "generateUpdatesFilesForAllChannels": true,
     "appId": "tutorial.reactElectron",
     "productName": "React Electron App Tutorial",
     "copyright": "Cinarrtolga",

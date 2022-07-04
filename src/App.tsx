@@ -1,4 +1,3 @@
-import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -18,6 +17,7 @@ function App() {
         >
           Learn React
         </a>
+        This is a {process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING!} application
       </header>
     </div>
   );

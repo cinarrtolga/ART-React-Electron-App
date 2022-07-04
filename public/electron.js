@@ -18,8 +18,11 @@ function createWindow() {
             nodeIntegration: true
         }
     });
-    //win.loadURL(startUrl);
-    win.loadURL('file:///' + __dirname + "/index.html");
+    if (process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING === 'dev') {
+        win.loadURL(startUrl);
+    } else {
+        win.loadURL('file:///' + __dirname + "/index.html");
+    }
     app.on('window-all-closed', () => {
         if (process.platform !== 'darwin') {
             app.quit()
@@ -29,7 +32,8 @@ function createWindow() {
 
 app.whenReady().then(() => {
     createWindow();
-    updateInterval = setInterval(() => autoUpdater.checkForUpdates(), 600000);
+    autoUpdater.channel = process.env.REACT_APP_ENV_UPDATE_CHANNEL || 'latest';
+    updateInterval = setInterval(() => autoUpdater.checkForUpdates(), 10000);
 });
 
 app.on('window-all-closed', () => {
@@ -46,25 +50,25 @@ app.on('activate', () => {
 
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     const dialogOpts = {
-		type: 'info',
-		buttons: ['Ok'],
-		title: 'Update Available',
-		message: process.platform === 'win32' ? releaseNotes : releaseName,
-		detail: 'A new version download started. The app will be restarted to install the update.'
-	};
-	dialog.showMessageBox(dialogOpts);
+        type: 'info',
+        buttons: ['Ok'],
+        title: `${process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING} Update Available`,
+        message: process.platform === 'win32' ? releaseNotes : releaseName,
+        detail: `A new ${process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING} version download started. The app will be restarted to install the update.`
+    };
+    dialog.showMessageBox(dialogOpts);
     updateInterval = null;
 });
 
 autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
-	const dialogOpts = {
-		type: 'info',
-		buttons: ['Restart', 'Later'],
-		title: 'Application Update',
-		message: process.platform === 'win32' ? releaseNotes : releaseName,
-		detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-	};
-	dialog.showMessageBox(dialogOpts).then((returnValue) => {
-		if (returnValue.response === 0) autoUpdater.quitAndInstall()
-	})
+    const dialogOpts = {
+        type: 'info',
+        buttons: ['Restart', 'Later'],
+        title: 'Application Update',
+        message: process.platform === 'win32' ? releaseNotes : releaseName,
+        detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+    };
+    dialog.showMessageBox(dialogOpts).then((returnValue) => {
+        if (returnValue.response === 0) autoUpdater.quitAndInstall()
+    })
 });
