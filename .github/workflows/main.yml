@@ -15,20 +15,30 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 15.x
-      - name: 'npm install, build'
+      - name: 'dev npm install, build'
+        if: github.ref == 'refs/heads/develop'
         run: |
           npm install
           npm install wine --save
           echo ${{github.ref}}
-          if: github.ref == 'refs/heads/develop'
-            npm run build:dev
-            npm run publish
-          if: github.ref == 'refs/heads/integration'
-            npm run build:qa
-            npm run publish
-          if: github.ref == 'refs/heads/master'
-            npm run build:prod
-            npm run publish
+          npm run build:dev
+          npm run publish
+      - name: 'integration npm install, build'
+        if: github.ref == 'refs/heads/integration'
+        run: |
+          npm install
+          npm install wine --save
+          echo ${{github.ref}}
+          npm run build:qa
+          npm run publish
+      - name: 'prod npm install, build'
+        if: github.ref == 'refs/heads/master'
+        run: |
+          npm install
+          npm install wine --save
+          echo ${{github.ref}}
+          npm run build:prod
+          npm run publish
         env:
           GH_TOKEN: '${{ secrets.GH_TOKEN }}'
           CI: false
