@@ -17,9 +17,6 @@ jobs:
           node-version: 15.x
       - name: 'npm install, build'
         run: |
-          echo "Exporting NPM_TOKEN"
-          echo ${{ secrets.NPM_TOKEN }}
-          export NPM_TOKEN=${{ secrets.NPM_TOKEN }}
           npm install
           npm install wine --save
           if: ${{ github.ref == 'ref/heads/develop' }}
@@ -33,5 +30,4 @@ jobs:
             npm run publish
         env:
           GH_TOKEN: '${{ secrets.GH_TOKEN }}'
-          NPM_TOKEN: '${{ secrets.NPM_TOKEN }}'
           CI: false
