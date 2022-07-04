@@ -19,7 +19,7 @@ jobs:
         if: github.ref == 'refs/heads/develop'
         run: |
           npm install
-          npm install wine --save
+          npm install -g npm
           echo ${{github.ref}}
           npm run build:dev
           npm run publish
@@ -27,7 +27,7 @@ jobs:
         if: github.ref == 'refs/heads/integration'
         run: |
           npm install
-          npm install wine --save
+          npm install -g npm
           echo ${{github.ref}}
           npm run build:qa
           npm run publish
@@ -35,7 +35,7 @@ jobs:
         if: github.ref == 'refs/heads/master'
         run: |
           npm install
-          npm install wine --save
+          npm install -g npm
           echo ${{github.ref}}
           npm run build:prod
           npm run publish
