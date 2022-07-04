@@ -19,13 +19,14 @@ jobs:
         run: |
           npm install
           npm install wine --save
-          if [[ github.ref == 'ref/heads/develop' ]]
+          echo github.ref
+          if [[ "${{github.ref}}" == "ref/heads/develop" ]]; then
             npm run build:dev
             npm run publish
-          if [[ ${{ github.ref == 'ref/heads/integration' ]]
+          if [[ "${{github.ref}}" == "ref/heads/integration" ]]; then
             npm run build:qa
             npm run publish
-          if [[ ${{ github.ref == 'ref/heads/master' ]]
+          if [[ "${{github.ref}}" == "ref/heads/master" ]]; then
             npm run build:prod
             npm run publish
         env:
