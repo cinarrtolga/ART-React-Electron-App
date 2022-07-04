@@ -25,14 +25,14 @@
     "version": "echo 'starting postversion script'",
     "postversion": "LAST_VERSION=$(npm pkg get version | sed 's/\"//g')$REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX && echo $LAST_VERSION && sed -i.bak \"s/\\\"version\\\": \\\"[0-9]\\.[0-9]\\.[0-9]\\\"/\\\"version\\\": \\\"$LAST_VERSION\\\"/g\" package.json",
     "start": "export BROWSER=none && react-scripts start",
-    "build:dev": "set NODE_ENV=dev env-cmd -f .env.dev npm run version && react-scripts build",
-    "build:qa": "set NODE_ENV=qa env-cmd -f .env.qa npm run version && react-scripts build",
-    "build:prod": "set NODE_ENV=prod env-cmd -f .env.prod npm run version && react-scripts build",
+    "build:dev": "env-cmd -f .env.dev npm run version && react-scripts build",
+    "build:qa": "env-cmd -f .env.qa npm run version && react-scripts build",
+    "build:prod": "env-cmd -f .env.prod npm run version && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-electron": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
     "package": "electron-builder build --mac --win -c.extraMetadata.main=build/electron.js --publish never",
-    "publish": "electron-builder build --mac --win --publish always"
+    "publish": "electron-builder --mac --win --publish always"
   },
   "eslintConfig": {
     "extends": [
