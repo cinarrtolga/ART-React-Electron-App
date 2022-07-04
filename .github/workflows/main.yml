@@ -23,6 +23,9 @@ jobs:
           echo ${{github.ref}}
           npm run build:dev
           npm run publish
+        env:
+          REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX: -alpha
+          REACT_APP_ENV_UPDATE_CHANNEL_STRING: 'alpha'
       - name: 'integration npm install, build'
         if: github.ref == 'refs/heads/integration'
         run: |
@@ -31,6 +34,9 @@ jobs:
           echo ${{github.ref}}
           npm run build:qa
           npm run publish
+        env:
+          REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX: -beta
+          REACT_APP_ENV_UPDATE_CHANNEL_STRING: 'beta'
       - name: 'prod npm install, build'
         if: github.ref == 'refs/heads/master'
         run: |
@@ -39,6 +45,9 @@ jobs:
           echo ${{github.ref}}
           npm run build:prod
           npm run publish
+        env:
+          REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX: ''
+          REACT_APP_ENV_UPDATE_CHANNEL_STRING: 'latest'
     env:
       GH_TOKEN: '${{ secrets.GH_TOKEN }}'
       CI: false
