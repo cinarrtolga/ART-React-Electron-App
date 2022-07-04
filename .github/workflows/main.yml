@@ -19,7 +19,6 @@ jobs:
         run: |
           npm install
           npm install wine --save
-          echo github.ref
           if [[ "${{github.ref}}" == "ref/heads/develop" ]]; then
             npm run build:dev
             npm run publish
