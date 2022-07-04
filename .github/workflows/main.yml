@@ -1,0 +1,37 @@
+name: Electron release
+'on':
+  push:
+    branches:
+      - develop
+      - integration
+      - master
+
+jobs:
+  electron_app_dev:
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 15.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+      - name: 'npm install, build'
+        run: |
+          echo "Exporting NPM_TOKEN"
+          echo ${{ secrets.NPM_TOKEN }}
+          export NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+          npm install
+          npm install wine --save
+          if: ${{ github.ref == 'ref/heads/develop' }}
+            npm run build:dev
+            npm run publish
+          if: ${{ github.ref == 'ref/heads/integration' }}
+            npm run build:qa
+            npm run publish
+          if: ${{ github.ref == 'ref/heads/master' }}
+            npm run build:prod
+            npm run publish
+        env:
+          GH_TOKEN: '${{ secrets.GH_TOKEN }}'
+          NPM_TOKEN: '${{ secrets.NPM_TOKEN }}'
+          CI: false
