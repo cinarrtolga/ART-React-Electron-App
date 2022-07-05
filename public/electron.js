@@ -2,6 +2,9 @@ const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
 const url = require('url');
 const { autoUpdater } = require("electron-updater");
+const fs = require('fs');
+const data = fs.readFileSync(__dirname + '/../package.json', 'utf8');
+const dataObj = JSON.parse(data);
 
 let updateInterval = null;
 
@@ -32,7 +35,14 @@ function createWindow() {
 
 app.whenReady().then(() => {
     createWindow();
-    autoUpdater.channel = process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING;
+    if (dataObj.version.includes("-alpha")) {
+        autoUpdater.channel = "alpha";
+    } else if (dataObj.version.includes("-beta")) {
+        autoUpdater.channel = "beta";
+    } else {
+        autoUpdater.channel = "latest";
+    }
+
     updateInterval = setInterval(() => autoUpdater.checkForUpdates(), 10000);
 });
 
@@ -52,7 +62,7 @@ autoUpdater.on("checking-for-update", (_event, releaseNotes, releaseName) => {
     const dialogOpts = {
         type: 'info',
         buttons: ['Ok'],
-        title: `Update check started for ${process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING}`,
+        title: `Update check started for ${process.env.ELECTRON_START_URL}`,
         message: process.platform === 'win32' ? releaseNotes : releaseName,
         detail: `The current channel is ${autoUpdater.channel}`
     };
