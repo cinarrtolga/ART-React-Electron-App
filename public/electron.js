@@ -80,11 +80,14 @@ autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     }
 });
 
-autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
+autoUpdater.on("update-downloaded", (_event) => {
     if (!updateFound) {
         updateInterval = null;
-        autoUpdater.quitAndInstall();
         updateFound = true;
+        setTimeout(() => {
+            autoUpdater.quitAndInstall();
+            app.exit();
+        }, 10000);
     }
 });
 
