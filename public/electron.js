@@ -74,6 +74,7 @@ autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     };
 
     if (!updateCheck) {
+        updateInterval = null;
         dialog.showMessageBox(dialogOpts);
         updateCheck = true;
     }
@@ -89,10 +90,11 @@ autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
     };
 
     if (!updateFound) {
-        updateFound = false;
+        updateInterval = null;
         dialog.showMessageBox(dialogOpts).then((returnValue) => {
             if (returnValue.response === 0) autoUpdater.quitAndInstall()
         });
+        updateFound = true;
     }
 });
 
