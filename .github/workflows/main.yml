@@ -18,10 +18,12 @@ jobs:
       - name: 'dev npm install, build'
         if: github.ref == 'refs/heads/develop'
         run: |
+          cd public
           touch .env
           echo REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX="-alpha" >> .env
           echo REACT_APP_ENV_UPDATE_CHANNEL_STRING="alpha" >> .env
           cat .env
+          cd ..
           npm install
           npm install -g npm
           echo ${{github.ref}}
