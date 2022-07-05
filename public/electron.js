@@ -32,7 +32,7 @@ function createWindow() {
 
 app.whenReady().then(() => {
     createWindow();
-    autoUpdater.channel = process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING || 'latest';
+    autoUpdater.channel = process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING;
     updateInterval = setInterval(() => autoUpdater.checkForUpdates(), 10000);
 });
 
