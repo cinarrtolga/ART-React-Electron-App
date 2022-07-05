@@ -10,6 +10,7 @@ let updateInterval = null;
 let updateCheck = false;
 let updateFound = false;
 let updateNotAvailable = false;
+let win;
 
 function createWindow() {
     const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -17,7 +18,7 @@ function createWindow() {
         protocol: 'file:',
         slashes: true,
     });
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         width: 800,
         height: 800,
         webPreferences: {
@@ -84,10 +85,8 @@ autoUpdater.on("update-downloaded", (_event) => {
     if (!updateFound) {
         updateInterval = null;
         updateFound = true;
-        setImmediate(() => {
-            app.removeAllListeners("window-all-closed")
-            autoUpdater.quitAndInstall(false)
-        });
+        win.setClosable(true);
+        autoUpdater.quitAndInstall();
     }
 });
 
