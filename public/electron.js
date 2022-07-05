@@ -7,6 +7,8 @@ const data = fs.readFileSync(__dirname + '/../package.json', 'utf8');
 const dataObj = JSON.parse(data);
 
 let updateInterval = null;
+let updateCheck = false;
+let updateFound = false;
 
 function createWindow() {
     const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -66,8 +68,11 @@ autoUpdater.on("checking-for-update", (_event) => {
         message: "A message!",
         detail: `A new ${autoUpdater.channel} version check started.`
     };
-    dialog.showMessageBox(dialogOpts);
-    updateInterval = null;
+
+    if (!updateCheck) {
+        dialog.showMessageBox(dialogOpts);
+        updateCheck = true;
+    }
 });
 
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
@@ -76,10 +81,13 @@ autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
         buttons: ['Ok'],
         title: `${autoUpdater.channel} Update Available`,
         message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: `A new ${autoUpdater.channel} version download started. The app will be restarted to install the update.`
+        detail: `A new ${autoUpdater.channel} version download started. ${releaseName} / ${releaseNotes}`
     };
-    dialog.showMessageBox(dialogOpts);
-    updateInterval = null;
+
+    if(!updateFound) {
+        dialog.showMessageBox(dialogOpts);
+        updateInterval = null; 
+    }
 });
 
 autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
