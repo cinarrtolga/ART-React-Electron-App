@@ -1,6 +1,6 @@
 {
   "name": "electron-app",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "productName": "React Electron App",
   "main": "public/electron.js",
   "homepage": "./",
@@ -59,7 +59,7 @@
   },
   "build": {
     "generateUpdatesFilesForAllChannels": true,
-    "appId": "tutorial.reactElectron",
+    "appId": "tutorial.reactElectronAutoUpdater",
     "productName": "React Electron App Tutorial",
     "copyright": "Cinarrtolga",
     "mac": {
