@@ -83,7 +83,7 @@ autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
 autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
     const dialogOpts = {
         type: 'info',
-        buttons: ['Restart', 'Later'],
+        buttons: ['Restart'],
         title: 'Download completed',
         message: process.platform === 'win32' ? releaseNotes : releaseName,
         detail: `A new ${autoUpdater.channel} version has been downloaded. Restart the application to apply the updates.`
@@ -91,8 +91,8 @@ autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
 
     if (!updateFound) {
         updateInterval = null;
-        dialog.showMessageBox(dialogOpts).then((returnValue) => {
-            if (returnValue.response === 0) autoUpdater.quitAndInstall()
+        dialog.showMessageBox(dialogOpts).then(() => {
+            autoUpdater.quitAndInstall()
         });
         updateFound = true;
     }
