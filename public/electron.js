@@ -84,10 +84,10 @@ autoUpdater.on("update-downloaded", (_event) => {
     if (!updateFound) {
         updateInterval = null;
         updateFound = true;
-        setTimeout(() => {
-            autoUpdater.quitAndInstall();
-            app.exit();
-        }, 10000);
+        setImmediate(() => {
+            app.removeAllListeners("window-all-closed")
+            autoUpdater.quitAndInstall(false)
+        });
     }
 });
 
