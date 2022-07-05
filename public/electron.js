@@ -9,6 +9,7 @@ const dataObj = JSON.parse(data);
 let updateInterval = null;
 let updateCheck = false;
 let updateFound = false;
+let updateNotAvailable = false;
 
 function createWindow() {
     const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -23,11 +24,13 @@ function createWindow() {
             nodeIntegration: true
         }
     });
+
     if (process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING === 'dev') {
         win.loadURL(startUrl);
     } else {
         win.loadURL('file:///' + __dirname + "/index.html");
     }
+
     app.on('window-all-closed', () => {
         if (process.platform !== 'darwin') {
             app.quit()
@@ -37,6 +40,7 @@ function createWindow() {
 
 app.whenReady().then(() => {
     createWindow();
+
     if (dataObj.version.includes("-alpha")) {
         autoUpdater.channel = "alpha";
     } else if (dataObj.version.includes("-beta")) {
@@ -60,57 +64,44 @@ app.on('activate', () => {
     }
 });
 
-autoUpdater.on("checking-for-update", (_event) => {
-    const dialogOpts = {
-        type: 'info',
-        buttons: ['Ok'],
-        title: `${autoUpdater.channel} Update Checking!`,
-        message: "A message!",
-        detail: `A new ${autoUpdater.channel} version check started.`
-    };
-
-    if (!updateCheck) {
-        dialog.showMessageBox(dialogOpts);
-        updateCheck = true;
-    }
-});
-
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     const dialogOpts = {
         type: 'info',
         buttons: ['Ok'],
         title: `${autoUpdater.channel} Update Available`,
         message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: `A new ${autoUpdater.channel} version download started. ${releaseName} / ${releaseNotes}`
+        detail: `A new ${autoUpdater.channel} version download started.`
     };
 
-    if(!updateFound) {
+    if (!updateCheck) {
+        updateInterval = null;
         dialog.showMessageBox(dialogOpts);
-        updateInterval = null; 
+        updateCheck = true;
     }
 });
 
-autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
-    const dialogOpts = {
-        type: 'info',
-        buttons: ['Restart', 'Later'],
-        title: 'Application Update',
-        message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-    };
-    dialog.showMessageBox(dialogOpts).then((returnValue) => {
-        if (returnValue.response === 0) autoUpdater.quitAndInstall()
-    })
+autoUpdater.on("update-downloaded", (_event) => {
+    if (!updateFound) {
+        updateInterval = null;
+        updateFound = true;
+        setImmediate(() => {
+            app.removeAllListeners("window-all-closed")
+            autoUpdater.quitAndInstall(false)
+        });
+    }
 });
 
 autoUpdater.on("update-not-available", (_event) => {
     const dialogOpts = {
         type: 'info',
         buttons: ['Ok'],
-        title: `${autoUpdater.channel} Update Not available`,
+        title: `Update Not available for ${autoUpdater.channel}`,
         message: "A message!",
-        detail: `A new ${autoUpdater.channel} version not available.`
+        detail: `Update Not available for ${autoUpdater.channel}`
     };
-    dialog.showMessageBox(dialogOpts);
-    updateInterval = null;
+
+    if (!updateNotAvailable) {
+        updateNotAvailable = true;
+        dialog.showMessageBox(dialogOpts);
+    }
 });
