@@ -40,7 +40,7 @@ function createWindow() {
 
 app.whenReady().then(() => {
     createWindow();
-    
+
     if (dataObj.version.includes("-alpha")) {
         autoUpdater.channel = "alpha";
     } else if (dataObj.version.includes("-beta")) {
@@ -81,19 +81,9 @@ autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
 });
 
 autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
-    const dialogOpts = {
-        type: 'info',
-        buttons: ['Restart'],
-        title: 'Download completed',
-        message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: `A new ${autoUpdater.channel} version has been downloaded. Restart the application to apply the updates.`
-    };
-
     if (!updateFound) {
         updateInterval = null;
-        dialog.showMessageBox(dialogOpts).then(() => {
-            autoUpdater.quitAndInstall()
-        });
+        autoUpdater.quitAndInstall();
         updateFound = true;
     }
 });
