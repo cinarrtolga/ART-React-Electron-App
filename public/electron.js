@@ -58,25 +58,14 @@ app.on('activate', () => {
     }
 });
 
-autoUpdater.on("checking-for-update", (_event, releaseNotes, releaseName) => {
-    const dialogOpts = {
-        type: 'info',
-        buttons: ['Ok'],
-        title: `Update check started for ${process.env.ELECTRON_START_URL}`,
-        message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: `The current channel is ${autoUpdater.channel}`
-    };
-    dialog.showMessageBox(dialogOpts);
-    updateInterval = null;
-});
 
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     const dialogOpts = {
         type: 'info',
         buttons: ['Ok'],
-        title: `${process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING} Update Available`,
+        title: `${dataObj.version} Update Available`,
         message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: `A new ${process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING} version download started. The app will be restarted to install the update.`
+        detail: `A new ${dataObj.version} version download started. The app will be restarted to install the update.`
     };
     dialog.showMessageBox(dialogOpts);
     updateInterval = null;
