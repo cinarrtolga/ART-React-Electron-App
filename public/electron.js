@@ -54,7 +54,7 @@ autoUpdater.on("checking-for-update", (_event, releaseNotes, releaseName) => {
         buttons: ['Ok'],
         title: `Update check started for ${process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING}`,
         message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: `The current channel is ${autoUpdater.channel} All environments are ${process.env}`
+        detail: `The current channel is ${autoUpdater.channel} / ${window.process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING}`
     };
     dialog.showMessageBox(dialogOpts);
     updateInterval = null;
