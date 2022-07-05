@@ -2,8 +2,13 @@ const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
 const url = require('url');
 const { autoUpdater } = require("electron-updater");
+const fs = require('fs');
+const data = fs.readFileSync(__dirname + '/../package.json', 'utf8');
+const dataObj = JSON.parse(data);
 
 let updateInterval = null;
+let updateCheck = false;
+let updateFound = false;
 
 function createWindow() {
     const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -32,7 +37,14 @@ function createWindow() {
 
 app.whenReady().then(() => {
     createWindow();
-    autoUpdater.channel = process.env.REACT_APP_ENV_UPDATE_CHANNEL || 'latest';
+    if (dataObj.version.includes("-alpha")) {
+        autoUpdater.channel = "alpha";
+    } else if (dataObj.version.includes("-beta")) {
+        autoUpdater.channel = "beta";
+    } else {
+        autoUpdater.channel = "latest";
+    }
+
     updateInterval = setInterval(() => autoUpdater.checkForUpdates(), 10000);
 });
 
@@ -48,16 +60,34 @@ app.on('activate', () => {
     }
 });
 
+autoUpdater.on("checking-for-update", (_event) => {
+    const dialogOpts = {
+        type: 'info',
+        buttons: ['Ok'],
+        title: `${autoUpdater.channel} Update Checking!`,
+        message: "A message!",
+        detail: `A new ${autoUpdater.channel} version check started.`
+    };
+
+    if (!updateCheck) {
+        dialog.showMessageBox(dialogOpts);
+        updateCheck = true;
+    }
+});
+
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     const dialogOpts = {
         type: 'info',
         buttons: ['Ok'],
-        title: `${process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING} Update Available`,
+        title: `${autoUpdater.channel} Update Available`,
         message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: `A new ${process.env.REACT_APP_ENV_UPDATE_CHANNEL_STRING} version download started. The app will be restarted to install the update.`
+        detail: `A new ${autoUpdater.channel} version download started. ${releaseName} / ${releaseNotes}`
     };
-    dialog.showMessageBox(dialogOpts);
-    updateInterval = null;
+
+    if(!updateFound) {
+        dialog.showMessageBox(dialogOpts);
+        updateInterval = null; 
+    }
 });
 
 autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
@@ -71,4 +101,16 @@ autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
     dialog.showMessageBox(dialogOpts).then((returnValue) => {
         if (returnValue.response === 0) autoUpdater.quitAndInstall()
     })
+});
+
+autoUpdater.on("update-not-available", (_event) => {
+    const dialogOpts = {
+        type: 'info',
+        buttons: ['Ok'],
+        title: `${autoUpdater.channel} Update Not available`,
+        message: "A message!",
+        detail: `A new ${autoUpdater.channel} version not available.`
+    };
+    dialog.showMessageBox(dialogOpts);
+    updateInterval = null;
 });
