@@ -58,14 +58,25 @@ app.on('activate', () => {
     }
 });
 
+autoUpdater.on("checking-for-update", (_event) => {
+    const dialogOpts = {
+        type: 'info',
+        buttons: ['Ok'],
+        title: `${autoUpdater.channel} Update Checking!`,
+        message: "A message!",
+        detail: `A new ${autoUpdater.channel} version check started.`
+    };
+    dialog.showMessageBox(dialogOpts);
+    updateInterval = null;
+});
 
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     const dialogOpts = {
         type: 'info',
         buttons: ['Ok'],
-        title: `${dataObj.version} Update Available`,
+        title: `${autoUpdater.channel} Update Available`,
         message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: `A new ${dataObj.version} version download started. The app will be restarted to install the update.`
+        detail: `A new ${autoUpdater.channel} version download started. The app will be restarted to install the update.`
     };
     dialog.showMessageBox(dialogOpts);
     updateInterval = null;
@@ -82,4 +93,16 @@ autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
     dialog.showMessageBox(dialogOpts).then((returnValue) => {
         if (returnValue.response === 0) autoUpdater.quitAndInstall()
     })
+});
+
+autoUpdater.on("update-not-available", (_event) => {
+    const dialogOpts = {
+        type: 'info',
+        buttons: ['Ok'],
+        title: `${autoUpdater.channel} Update Not available`,
+        message: "A message!",
+        detail: `A new ${autoUpdater.channel} version not available.`
+    };
+    dialog.showMessageBox(dialogOpts);
+    updateInterval = null;
 });
