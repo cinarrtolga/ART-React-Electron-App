@@ -1,6 +1,6 @@
 {
   "name": "electron-app",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "productName": "Tolga's Electron App",
   "main": "public/electron.js",
   "homepage": "./",
@@ -61,7 +61,7 @@
   "build": {
     "generateUpdatesFilesForAllChannels": true,
     "appId": "tolga.electronapp",
-    "productName": "React-Electron App Tutorial",
+    "productName": "Tolga's Electron App",
     "copyright": "Cinarrtolga",
     "mac": {
       "publish": {
