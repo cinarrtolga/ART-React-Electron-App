@@ -85,8 +85,10 @@ autoUpdater.on("update-downloaded", (_event) => {
     if (!updateFound) {
         updateInterval = null;
         updateFound = true;
-        win.setClosable(true);
-        autoUpdater.quitAndInstall();
+
+        setTimeout(() => {
+            autoUpdater.quitAndInstall();
+        }, 3500);
     }
 });
 

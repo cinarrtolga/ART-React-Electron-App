@@ -1,6 +1,6 @@
 {
   "name": "electron-app",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "productName": "React Electron App",
   "main": "public/electron.js",
   "homepage": "./",
@@ -13,7 +13,8 @@
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
     "dotenv": "^16.0.1",
-    "electron-updater": "^4.6.5",
+    "electron-updater": "^5.0.5",
+    "electron-updater-debug": "^3.1.2",
     "env-cmd": "^10.1.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -54,13 +55,13 @@
     ]
   },
   "devDependencies": {
-    "electron": "^18.2.0",
-    "electron-builder": "^23.0.3"
+    "electron": "^19.0.7",
+    "electron-builder": "^23.1.0"
   },
   "build": {
     "generateUpdatesFilesForAllChannels": true,
-    "appId": "tutorial.reactElectronAutoUpdater",
-    "productName": "React Electron App Tutorial",
+    "appId": "cinarr.electrontutorial",
+    "productName": "React-Electron App Tutorial",
     "copyright": "Cinarrtolga",
     "mac": {
       "publish": {
