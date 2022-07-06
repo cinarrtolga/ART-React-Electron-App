@@ -1,6 +1,6 @@
 {
-  "name": "electron-app",
-  "version": "0.3.9",
+  "name": "electron-tutorial-app",
+  "version": "0.4.0",
   "productName": "Tolga's Electron App",
   "main": "public/electron.js",
   "homepage": "./",
