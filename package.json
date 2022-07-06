@@ -1,7 +1,7 @@
 {
   "name": "electron-tutorial-app",
-  "version": "0.4.0",
-  "productName": "Tolga's Electron App",
+  "version": "0.4.1",
+  "productName": "React Electron App",
   "main": "public/electron.js",
   "homepage": "./",
   "dependencies": {
@@ -34,7 +34,7 @@
     "eject": "react-scripts eject",
     "start-electron": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
     "package": "electron-builder build --mac --win -c.extraMetadata.main=build/electron.js --publish never",
-    "publish": "electron-builder --mac --win --publish always"
+    "publish": "electron-builder build --mac --win --publish always"
   },
   "eslintConfig": {
     "extends": [
@@ -60,8 +60,8 @@
   },
   "build": {
     "generateUpdatesFilesForAllChannels": true,
-    "appId": "tolga.electronapp",
-    "productName": "Tolga's Electron App",
+    "appId": "cinarrtolga.electronapp",
+    "productName": "React Electron App",
     "copyright": "Cinarrtolga",
     "mac": {
       "publish": {
