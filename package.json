@@ -1,6 +1,6 @@
 {
   "name": "electron-app",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "productName": "React Electron App",
   "main": "public/electron.js",
   "homepage": "./",
