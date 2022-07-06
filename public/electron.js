@@ -10,6 +10,7 @@ let updateInterval = null;
 let updateCheck = false;
 let updateFound = false;
 let updateNotAvailable = false;
+let willQuitApp = false;
 let win;
 
 function createWindow() {
@@ -35,6 +36,17 @@ function createWindow() {
     app.on('window-all-closed', () => {
         if (process.platform !== 'darwin') {
             app.quit()
+        }
+    });
+
+    window.on('close', (e) => {
+        if (willQuitApp) {
+            /* the user tried to quit the app */
+            window = null;
+        } else {
+            /* the user only tried to close the window */
+            e.preventDefault();
+            window.hide();
         }
     });
 }
@@ -64,6 +76,8 @@ app.on('activate', () => {
         createWindow()
     }
 });
+
+app.on('before-quit', () => willQuitApp = true);
 
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     const dialogOpts = {
